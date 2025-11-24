@@ -4,6 +4,7 @@ import "../styles/App.scss";
 import Header from "./Header";
 import Board from "./Board";
 import Grogu from "./Grogu";
+import Dice from "./Dice";
 
 /* EVENTO CLICK BOTÓN: lanzar dado */
   //1. Generar numero aleatorio entre 1 y 4
@@ -20,7 +21,7 @@ import Grogu from "./Grogu";
 
 function App() {
 
-const [groguPosition, setGroguPosition] = useState("0")
+const [groguPosition, setGroguPosition] = useState(0)
 
 const [numberOfCookies, setNumberOfCookies] = useState(3)
 const [numberOfEggs, setNumberOfEggs] = useState(3)
@@ -29,22 +30,39 @@ const [numberOfFrogs, setNumberOfFrogs] = useState(3)
 let [randomNumber, setRandomNumber] = useState(0)
 
 // eslint-disable-next-line no-unused-vars
-const [gameStatus, setGameStatus] = useState("")
+const [gameStatus, setGameStatus] = useState("En curso")
 
 function rollDice() {
-  randomNumber = Math.floor(Math.random() * 4) + 1;
-  return randomNumber;
+  const randomNumber = Math.floor(Math.random() * 4) + 1;
+  console.log(randomNumber);
+  
+  
+
+  if (randomNumber === 4){
+  setGroguPosition(+1);
+  setGameStatus("Grogu ha avanzado una casilla");
+
+} else if (randomNumber === 1 && numberOfCookies>0)
+  setNumberOfCookies(numberOfCookies-1),
+  setGameStatus("Grogu se ha comido una galleta")
+
+ else if (randomNumber === 2 && numberOfEggs>0)
+  setNumberOfEggs(numberOfEggs-1),
+  setGameStatus("Grogu se ha comido un huevo")
+
+ else if (randomNumber === 3 && numberOfFrogs>0)
+  setNumberOfFrogs(numberOfFrogs-1),
+  setGameStatus("Grogu se ha comido una rana")
+
+ else {
+  setGameStatus("Ya no queda mercancía")
 }
 
-/*if (randomNumber === 4){
-  setGroguPosition("1")
 
-} else {
-  setNumberOfCookies(numberOfCookies-1)
-  setNumberOfEggs(numberOfEggs-1)
-  setNumberOfFrogs(numberOfFrogs-1)
+}
 
-}*/
+
+
 
 
 
@@ -58,8 +76,8 @@ function rollDice() {
       
 
       <section>
-        <button className="dice">Lanzar Dado</button>
-        <div className="game-status">En curso</div>
+        <Dice rollDice = {rollDice}/>
+        <div className="game-status">{gameStatus}</div>
       </section>
 
       <section className="goods-container">
