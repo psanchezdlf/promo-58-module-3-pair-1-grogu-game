@@ -3,7 +3,6 @@ import { useState } from "react";
 import "../styles/App.scss";
 import Header from "./Header";
 import Board from "./Board";
-import Grogu from "./Grogu";
 import Dice from "./Dice";
 
 /* EVENTO CLICK BOTÓN: lanzar dado */
@@ -70,7 +69,7 @@ function rollDice() {
     <div>
        <Header/>
     <main className="page">
-      <Board /*groguPosition={groguPosition}*/ />
+      <Board groguPosition={groguPosition} />
     
 
       
