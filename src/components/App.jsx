@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/App.scss";
 import Header from "./Header";
 import Board from "./Board";
@@ -31,25 +31,51 @@ function App() {
   const [gameStatus, setGameStatus] = useState("En curso");
 
   function rollDice() {
-    const randomNumber = Math.floor(Math.random() * 4) + 1;
-    console.log(randomNumber);
 
-    if (randomNumber === 4) {
-      setGroguPosition(+1);
+    const diceNumber = Math.floor(Math.random() * 4) + 1;
+    setRandomNumber(diceNumber);
+
+    if (diceNumber === 4) {
+      setGroguPosition(groguPosition +1);
       setGameStatus("Grogu ha avanzado una casilla");
-    } else if (randomNumber === 1 && numberOfCookies > 0)
+    } else if (diceNumber === 1 && numberOfCookies > 0){
+
       setNumberOfCookies(numberOfCookies - 1),
         setGameStatus("Grogu se ha comido una galleta");
-    else if (randomNumber === 2 && numberOfEggs > 0)
+    } else if (diceNumber === 2 && numberOfEggs > 0) {
       setNumberOfEggs(numberOfEggs - 1),
         setGameStatus("Grogu se ha comido un huevo");
-    else if (randomNumber === 3 && numberOfFrogs > 0)
+    } else if (diceNumber === 3 && numberOfFrogs > 0) {
       setNumberOfFrogs(numberOfFrogs - 1),
         setGameStatus("Grogu se ha comido una rana");
-    else {
+    } else if (numberOfCookies === 0 && numberOfEggs === 0 && numberOfFrogs === 0){
       setGameStatus("Ya no queda mercancía");
     }
   }
+
+  useEffect(() => {
+    const isGameOver =
+      groguPosition === 6 ||
+      (numberOfCookies === 0 && numberOfEggs === 0 && numberOfFrogs === 0);
+
+    // solo actualizamos si cambia el texto — así evitamos renders encadenados
+    if (isGameOver && gameStatus !== "Fin del juego") {
+      setGameStatus("Fin del juego");
+    }
+
+    if (isGameOver && groguPosition === 6) {
+       setGameStatus("Ganaste, Mando completa la misión" );
+    }
+     if (isGameOver && numberOfCookies === 0 && numberOfEggs === 0 && numberOfFrogs === 0) {
+       setGameStatus("¡¡Grogu se ha comido el cargamento!! Has perdido");
+    }
+
+  }, [groguPosition, numberOfCookies, numberOfEggs, numberOfFrogs, gameStatus]);
+// ...existing code...
+
+  
+
+
 
   return (
     <div>
