@@ -4,6 +4,10 @@ import "../styles/App.scss";
 import Header from "./Header";
 import Board from "./Board";
 import Dice from "./Dice";
+import Footer from "./Footer";
+import { Route, Routes  } from "react-router";
+import Instructions from "./Instructions";
+import {Link} from "react-router";
 
 /* EVENTO CLICK BOTÓN: lanzar dado */
 //1. Generar numero aleatorio entre 1 y 4
@@ -73,7 +77,13 @@ function App() {
   }, [groguPosition, numberOfCookies, numberOfEggs, numberOfFrogs, gameStatus]);
 // ...existing code...
 
-  
+  function resetGame() {
+    setGroguPosition(0);
+    setNumberOfCookies(3);
+    setNumberOfEggs(3);
+    setNumberOfFrogs(3);
+    setGameStatus("En curso");
+  }
 
 
 
@@ -82,9 +92,15 @@ function App() {
       <Header />
       <main className="page">
         <Board groguPosition={groguPosition} />
+        <Dice rollDice={rollDice} />
+        <Instructions>
+          <Routes>
+                    <Route path="/instructions" element={<Instructions/>} />
+                </Routes>
+                </Instructions>
 
         <section>
-          <Dice rollDice={rollDice} />
+          
           <div className="game-status">{gameStatus}</div>
         </section>
 
@@ -110,9 +126,12 @@ function App() {
           ))}
         </section>
         <section>
-          <button className="restart-button">Reiniciar Juego</button>
+          <button onClick={resetGame}className="restart-button">Reiniciar Juego</button>
         </section>
       </main>
+      <Footer>
+      </Footer>
+       
     </div>
   );
 }

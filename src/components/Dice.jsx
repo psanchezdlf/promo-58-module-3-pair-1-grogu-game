@@ -3,9 +3,10 @@ function Dice ({rollDice}) {
         rollDice ()
     }
 
-    return (
+    return (<div>
 
         <button onClick = {handleClick} className="dice">Lanzar Dado</button>
+        </div>
     )
 }
 export default Dice;

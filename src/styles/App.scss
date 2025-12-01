@@ -141,3 +141,19 @@ input[type="text"]:focus {
 input[type="text"]::placeholder {
     color: #999;
 }
+
+.footer__list{
+  list-style-type: none;
+  display: flex;
+  flex-direction: center;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 50px;
+    
+}
+.footer__menu-link{
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+}
