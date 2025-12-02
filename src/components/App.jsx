@@ -8,20 +8,10 @@ import Instructions from "./Instructions";
 import Game from "./Game";
 import Options from "./Options";
 
-/* EVENTO CLICK BOTÓN: lanzar dado */
-//1. Generar numero aleatorio entre 1 y 4
-//2. Condicional
-//- Si el dado es 4, Grogu avanza una posición => Cambiar la variable estado de la posición
-//- Si el dado es 1, 2 o 3, Grogu descarga una mercancia => cambiar estado de la mercancia
-/* EVENTO CLICK BOTÓN: reiniciar juego */
-//Restablecer el estado original de la posición y de la mercancia.
-/* DATOS */
-//-Posición => la posición tendrá el valor inicial de 0
-//-nº de galletas 3
-//-nº de nuevos 3
-//-nº de ranas 3
 
 function App() {
+
+  // VARIABLES DE ESTADO
   const [groguPosition, setGroguPosition] = useState(0);
 
   const [numberOfCookies, setNumberOfCookies] = useState(3);
@@ -32,6 +22,11 @@ function App() {
 
   // eslint-disable-next-line no-unused-vars
   const [gameStatus, setGameStatus] = useState("En curso");
+
+  // Variable para el formulario
+  const [name, setName] = useState("");
+
+  // FUNCIONES
 
   function rollDice() {
     // genera entre 1 y 4
@@ -103,9 +98,17 @@ function App() {
       <Header />
       <main className="page">
         <Routes>
-          <Route path="/game" element={<Game groguPosition={groguPosition} rollDice={rollDice} gameStatus={gameStatus} numberOfCookies={numberOfCookies} numberOfEggs={numberOfEggs} numberOfFrogs={numberOfFrogs} resetGame={resetGame}/>} />
+          <Route path="/game" element={<Game 
+          groguPosition={groguPosition} 
+          rollDice={rollDice} 
+          gameStatus={gameStatus} 
+          numberOfCookies={numberOfCookies} 
+          numberOfEggs={numberOfEggs} 
+          numberOfFrogs={numberOfFrogs} 
+          resetGame={resetGame}
+          name={name}/>} />
           <Route path="/instructions" element={<Instructions />} />
-          <Route path="/options" element={<Options />} />
+          <Route path="/options" element={<Options name={name} setName={setName} />} />
         </Routes>
       </main>
       <Footer/>

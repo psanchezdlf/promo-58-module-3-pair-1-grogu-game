@@ -1,13 +1,14 @@
 import Board from "./Board";
 import Dice from "./Dice";
 
-function Game({groguPosition, rollDice, gameStatus, numberOfCookies, numberOfEggs, numberOfFrogs,resetGame}) {
+function Game({groguPosition, rollDice, gameStatus, numberOfCookies, numberOfEggs, numberOfFrogs,resetGame,name}) {
     return (<>
         <Board groguPosition={groguPosition} />
         <Dice rollDice={rollDice} />
          <section>
           
-          <div className="game-status">{gameStatus}</div>
+          <div className="game-status">
+            {name? `${name}, ${gameStatus}` : gameStatus}</div>
         </section>
 
         <section className="goods-container">
