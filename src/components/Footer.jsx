@@ -1,21 +1,24 @@
 import { Link, Routes, Route } from "react-router";
-import Instructions from "./Instructions";
+
+
 
 function Footer() {
     return (
         <footer className="footer">
+            
+               
             <nav>
                
                 <ul className="footer__list">
                     <li className="footer__menu-item">
-                        <a className="footer__menu-link" href="#/">A jugar</a>
+                        <Link className="footer__menu-link" to="/game">A jugar</Link>
                     </li>
                     <li className="footer__menu-item">
                         <Link className="footer__menu-link active" to="/instructions"
                         >¿Cómo se juega?</Link>
                     </li>
                     <li className="footer__menu-item">
-                        <a className="footer__menu-link" href="#/options">Más opciones</a>
+                        <Link className="footer__menu-link" to="/options">Más opciones</Link>
                     </li>
                 </ul>
             </nav>

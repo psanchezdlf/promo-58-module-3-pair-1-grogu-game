@@ -2,12 +2,11 @@
 import { useEffect, useState } from "react";
 import "../styles/App.scss";
 import Header from "./Header";
-import Board from "./Board";
-import Dice from "./Dice";
 import Footer from "./Footer";
-import { Route, Routes  } from "react-router";
+import { Route, Routes } from "react-router";
 import Instructions from "./Instructions";
-import {Link} from "react-router";
+import Game from "./Game";
+import Options from "./Options";
 
 /* EVENTO CLICK BOTÓN: lanzar dado */
 //1. Generar numero aleatorio entre 1 y 4
@@ -35,47 +34,59 @@ function App() {
   const [gameStatus, setGameStatus] = useState("En curso");
 
   function rollDice() {
-
+    // genera entre 1 y 4
     const diceNumber = Math.floor(Math.random() * 4) + 1;
     setRandomNumber(diceNumber);
 
     if (diceNumber === 4) {
-      setGroguPosition(groguPosition +1);
+      setGroguPosition(prev => prev + 1);
       setGameStatus("Grogu ha avanzado una casilla");
-    } else if (diceNumber === 1 && numberOfCookies > 0){
-
-      setNumberOfCookies(numberOfCookies - 1),
-        setGameStatus("Grogu se ha comido una galleta");
-    } else if (diceNumber === 2 && numberOfEggs > 0) {
-      setNumberOfEggs(numberOfEggs - 1),
-        setGameStatus("Grogu se ha comido un huevo");
-    } else if (diceNumber === 3 && numberOfFrogs > 0) {
-      setNumberOfFrogs(numberOfFrogs - 1),
-        setGameStatus("Grogu se ha comido una rana");
-    } else if (numberOfCookies === 0 && numberOfEggs === 0 && numberOfFrogs === 0){
-      setGameStatus("Ya no queda mercancía");
+      return;
     }
+
+    if (diceNumber === 1 && numberOfCookies > 0) {
+      setNumberOfCookies(prev => prev - 1);
+      setGameStatus("Grogu se ha comido una galleta");
+      return;
+    }
+    if (diceNumber === 2 && numberOfEggs > 0) {
+      setNumberOfEggs(prev => prev - 1);
+      setGameStatus("Grogu se ha comido un huevo");
+      return;
+    }
+    if (diceNumber === 3 && numberOfFrogs > 0) {
+      setNumberOfFrogs(prev => prev - 1);
+      setGameStatus("Grogu se ha comido una rana");
+      return;
+    }
+
+    // Si cae algo pero la mercancía correspondiente ya es 0:
+    setGameStatus("No ocurrió nada (mercancía agotada para esa tirada)");
   }
 
-  useEffect(() => {
-    const isGameOver =
-      groguPosition === 6 ||
-      (numberOfCookies === 0 && numberOfEggs === 0 && numberOfFrogs === 0);
+    useEffect(() => {
+    const ranOut = numberOfCookies === 0 && numberOfEggs === 0 && numberOfFrogs === 0;
+    const reachedEnd = groguPosition >= 6;
 
-    // solo actualizamos si cambia el texto — así evitamos renders encadenados
-    if (isGameOver && gameStatus !== "Fin del juego") {
-      setGameStatus("Fin del juego");
+    if (reachedEnd) {
+      setGameStatus("Ganaste, Mando completa la misión");
+      return;
     }
-
-    if (isGameOver && groguPosition === 6) {
-       setGameStatus("Ganaste, Mando completa la misión" );
+    if (ranOut) {
+      setGameStatus("¡¡Grogu se ha comido el cargamento!! Has perdido");
+      return;
     }
-     if (isGameOver && numberOfCookies === 0 && numberOfEggs === 0 && numberOfFrogs === 0) {
-       setGameStatus("¡¡Grogu se ha comido el cargamento!! Has perdido");
+    // si no es fin, si estaba en "Fin del juego" o mensajes anteriores, lo dejamos en "En curso" o lo mantenemos
+    if (gameStatus === "Ganaste, Mando completa la misión" || gameStatus === "¡¡Grogu se ha comido el cargamento!! Has perdido") {
+      // no tocamos (evitamos volver a "En curso")
+      return;
     }
-
-  }, [groguPosition, numberOfCookies, numberOfEggs, numberOfFrogs, gameStatus]);
-// ...existing code...
+    // cuando se vuelve a jugar, mantenemos "En curso" por defecto
+    if (gameStatus === "En curso" || gameStatus === "No ocurrió nada (mercancía agotada para esa tirada)" ) {
+      // nada
+    }
+  }, [groguPosition, numberOfCookies, numberOfEggs, numberOfFrogs]);
+  
 
   function resetGame() {
     setGroguPosition(0);
@@ -91,47 +102,13 @@ function App() {
     <div>
       <Header />
       <main className="page">
-        <Board groguPosition={groguPosition} />
-        <Dice rollDice={rollDice} />
-        <Instructions>
-          <Routes>
-                    <Route path="/instructions" element={<Instructions/>} />
-                </Routes>
-                </Instructions>
-
-        <section>
-          
-          <div className="game-status">{gameStatus}</div>
-        </section>
-
-        <section className="goods-container">
-          {Array.from({ length: numberOfCookies }).map((_, i) => (
-            <div className="goods-item" key={i}>
-              🍪
-            </div>
-          ))}
-        </section>
-        <section className="goods-container">
-          {Array.from({ length: numberOfEggs }).map((_, i) => (
-            <div className="goods-item" key={i}>
-              🥚
-            </div>
-          ))}
-        </section>
-        <section className="goods-container">
-          {Array.from({ length: numberOfFrogs }).map((_, i) => (
-            <div className="goods-item" key={i}>
-              🐸
-            </div>
-          ))}
-        </section>
-        <section>
-          <button onClick={resetGame}className="restart-button">Reiniciar Juego</button>
-        </section>
+        <Routes>
+          <Route path="/game" element={<Game groguPosition={groguPosition} rollDice={rollDice} gameStatus={gameStatus} numberOfCookies={numberOfCookies} numberOfEggs={numberOfEggs} numberOfFrogs={numberOfFrogs} resetGame={resetGame}/>} />
+          <Route path="/instructions" element={<Instructions />} />
+          <Route path="/options" element={<Options />} />
+        </Routes>
       </main>
-      <Footer>
-      </Footer>
-       
+      <Footer/>
     </div>
   );
 }
