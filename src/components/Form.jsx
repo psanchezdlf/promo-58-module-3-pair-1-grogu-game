@@ -2,7 +2,6 @@ function Form({name, setName}) {
 
     function handleChange(ev) {
         setName(ev.target.value);
-        console.log(name);
     }
 
     function handleSubmit(ev) {

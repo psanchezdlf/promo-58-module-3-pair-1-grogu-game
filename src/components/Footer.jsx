@@ -5,10 +5,10 @@ import { Link, Routes, Route } from "react-router";
 function Footer() {
     return (
         <footer className="footer">
-            
-               
+
+
             <nav>
-               
+
                 <ul className="footer__list">
                     <li className="footer__menu-item">
                         <Link className="footer__menu-link" to="/game">A jugar</Link>
